@@ -1,6 +1,6 @@
 //
 //  PropertyListSerializationError.swift
-//  
+//
 //
 //  Created by Burak Colak on 18.03.2023.
 //
@@ -12,4 +12,5 @@ public enum PropertyListSerializationError: Error {
     case dataNotAvailable
     case fileNotParsed
     case modelNotParsed
+    case configNotLoaded
 }

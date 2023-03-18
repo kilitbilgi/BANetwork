@@ -8,32 +8,40 @@
 import Foundation
 
 public final class BAPlistUtils {
-    func getConfig() throws -> BAPlistModel {
-        guard let path = Bundle.main.path(forResource: "config", ofType: "plist") else {
-            throw PropertyListSerializationError.fileNotFound
+    func getConfig() -> BAPlistModel? {
+        guard let path = Bundle.main.path(forResource: "BAConfig", ofType: "plist") else {
+            throwFatalError(with: PropertyListSerializationError.fileNotFound)
+            return nil
         }
         let url = URL(fileURLWithPath: path)
 
         do {
             let data = try Data(contentsOf: url)
 
-            guard let plist = try getList(with: data) else {
-                throw PropertyListSerializationError.fileNotParsed
+            guard let plist = getList(with: data) else {
+                throwFatalError(with: PropertyListSerializationError.fileNotParsed)
+                return nil
             }
 
             return plist
         } catch {
-            throw PropertyListSerializationError.dataNotAvailable
+            throwFatalError(with: PropertyListSerializationError.dataNotAvailable)
+            return nil
         }
     }
 
-    private func getList(with data: Data) throws -> BAPlistModel? {
+    private func getList(with data: Data) -> BAPlistModel? {
         let decoder = PropertyListDecoder()
         do {
             let model = try decoder.decode(BAPlistModel.self, from: data)
             return model
         } catch {
-            throw PropertyListSerializationError.modelNotParsed
+            throwFatalError(with: PropertyListSerializationError.modelNotParsed)
+            return nil
         }
+    }
+
+    private func throwFatalError(with error: PropertyListSerializationError) {
+        fatalError(error.localizedDescription)
     }
 }

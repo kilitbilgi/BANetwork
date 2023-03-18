@@ -1,8 +1,7 @@
 public struct BANetwork {
     public init() {
-        guard let config = try? BAPlistUtils().getConfig() else {
-            return
+        if let config = BAPlistUtils().getConfig() {
+            print(config.baseURL)
         }
-        print(config.baseURL)
     }
 }

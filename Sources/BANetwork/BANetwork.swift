@@ -20,7 +20,9 @@ public class BANetwork {
     open var httpQueryItemsMessage = "HTTP QUERYITEMS:"
     open var httpBodyMessage = "HTTP BODY:"
 
-    private func baseRequest(to endpoint: BaseEndpoint) -> URLRequest? {
+    public init() {}
+
+    public func baseRequest(to endpoint: BaseEndpoint) -> URLRequest? {
         guard let urlRequest = endpoint.urlRequest else {
             BaseLogger.error(urlRequestErrorMessage)
             return nil
@@ -49,7 +51,7 @@ public class BANetwork {
         return urlRequest
     }
 
-    func request<T: Decodable>(to endpoint: BaseEndpoint, completion: @escaping (BaseResult<T, Error>) -> ()) {
+    public func request<T: Decodable>(to endpoint: BaseEndpoint, completion: @escaping (BaseResult<T, Error>) -> ()) {
         guard let urlRequest = self.baseRequest(to: endpoint) else {
             BaseLogger.error(urlRequestErrorMessage)
             return
@@ -94,7 +96,7 @@ public class BANetwork {
         dataTask.resume()
     }
 
-    func request(to endpoint: BaseEndpoint, completion: GenericCallbacks.InfoCallback) {
+    public func request(to endpoint: BaseEndpoint, completion: GenericCallbacks.InfoCallback) {
         guard let urlRequest = self.baseRequest(to: endpoint) else {
             BaseLogger.error(urlRequestErrorMessage)
             return

@@ -96,7 +96,7 @@ public struct BaseEndpoint {
         return URLSession(configuration: configuration, delegate: nil, delegateQueue: OperationQueue.main)
     }
 
-    init(path: String, method: BaseMethod = .get, queryItems: [URLQueryItem]? = nil, params: [String: Any?]? = nil) {
+    public init(path: String, method: BaseMethod = .get, queryItems: [URLQueryItem]? = nil, params: [String: Any?]? = nil) {
         self.path = path
         self.method = method
         self.queryItems = queryItems

@@ -5,7 +5,9 @@
 import Foundation
 
 final class BAPlistUtils {
-    func getConfig() -> BAPlistModel? {
+    static let shared = BAPlistUtils()
+
+    var config: BAPlistModel? {
         guard let path = Bundle.main.path(forResource: PListContants.fileName, ofType: PListContants.fileExtension) else {
             throwFatalError(with: PropertyListSerializationError.fileNotFound)
             return nil

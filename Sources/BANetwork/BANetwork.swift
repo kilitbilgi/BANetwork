@@ -20,21 +20,6 @@ public class BANetwork {
     open var httpQueryItemsMessage = "HTTP QUERYITEMS:"
     open var httpBodyMessage = "HTTP BODY:"
 
-    private var config: BAPlistModel {
-        guard let model = BAPlistUtils().getConfig() else {
-            return BAPlistModel(baseURL: "", timeout: 0)
-        }
-        return model
-    }
-
-    private var session: URLSession {
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = config.timeout
-        configuration.timeoutIntervalForResource = config.timeout
-
-        return URLSession(configuration: configuration, delegate: nil, delegateQueue: OperationQueue.main)
-    }
-
     private func baseRequest(to endpoint: BaseEndpoint) -> URLRequest? {
         guard let urlRequest = endpoint.urlRequest else {
             BaseLogger.error(urlRequestErrorMessage)
@@ -70,7 +55,7 @@ public class BANetwork {
             return
         }
 
-        let dataTask = session.dataTask(with: urlRequest) { [weak self] data, response, error in
+        let dataTask = endpoint.session.dataTask(with: urlRequest) { [weak self] data, response, error in
             guard error == nil else {
                 completion(.failure(BaseNetworkError(message: self?.errorMessage, log: error?.localizedDescription, endpoint: endpoint)))
                 return
@@ -115,7 +100,7 @@ public class BANetwork {
             return
         }
 
-        let dataTask = session.dataTask(with: urlRequest) { [weak self] data, response, error in
+        let dataTask = endpoint.session.dataTask(with: urlRequest) { [weak self] data, response, error in
             guard error == nil else {
                 completion?(false, BaseNetworkError(message: self?.errorMessage, log: error?.localizedDescription, endpoint: endpoint))
                 return

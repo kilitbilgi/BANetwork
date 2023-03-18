@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct BaseEndpoint {
+public struct BaseEndpoint {
 
     enum Scheme: String {
         case http = "http", https = "https"
@@ -36,7 +36,7 @@ struct BaseEndpoint {
         get {
             var components = URLComponents()
             components.scheme = scheme.rawValue
-            components.host = host
+            components.host = config.baseURL
             components.path = updatedPath
             components.queryItems = queryItems
             return components.url
@@ -79,6 +79,21 @@ struct BaseEndpoint {
 
             return urlRequest
         }
+    }
+
+    private var config: BAPlistModel {
+        guard let model = BAPlistUtils.shared.config else {
+            return BAPlistModel(baseURL: "", timeout: 0)
+        }
+        return model
+    }
+
+    var session: URLSession {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = config.timeout
+        configuration.timeoutIntervalForResource = config.timeout
+
+        return URLSession(configuration: configuration, delegate: nil, delegateQueue: OperationQueue.main)
     }
 
     init(path: String, method: BaseMethod = .get, queryItems: [URLQueryItem]? = nil, params: [String: Any?]? = nil) {

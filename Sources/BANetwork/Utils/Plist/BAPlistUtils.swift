@@ -1,15 +1,12 @@
 //
 //  BAPlistUtils.swift
 //
-//
-//  Created by Burak Colak on 18.03.2023.
-//
 
 import Foundation
 
-public final class BAPlistUtils {
+final class BAPlistUtils {
     func getConfig() -> BAPlistModel? {
-        guard let path = Bundle.main.path(forResource: "BAConfig", ofType: "plist") else {
+        guard let path = Bundle.main.path(forResource: PListContants.fileName, ofType: PListContants.fileExtension) else {
             throwFatalError(with: PropertyListSerializationError.fileNotFound)
             return nil
         }

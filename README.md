@@ -1,3 +1,3 @@
 # BANetwork
 
-A description of this package.
+BANetwork is package help developers to make requests easily.

@@ -1,10 +1,8 @@
 public struct BANetwork {
-    public init() throws {
-        do {
-            let config = try BAPlistUtils().getConfig()
-            print(config.baseURL)
-        } catch {
-            throw PropertyListSerializationError.configNotLoaded
+    public init() {
+        guard let config = try? BAPlistUtils().getConfig() else {
+            return
         }
+        print(config.baseURL)
     }
 }

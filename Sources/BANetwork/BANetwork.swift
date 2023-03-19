@@ -18,6 +18,7 @@ public class BANetwork {
     open var httpHeadersMessage = "HTTP HEADERS:"
     open var httpQueryItemsMessage = "HTTP QUERYITEMS:"
     open var httpBodyMessage = "HTTP BODY:"
+    open var httpRequestType = "HTTP Request TYPE:"
 
     public init() {}
 
@@ -27,10 +28,16 @@ public class BANetwork {
             return nil
         }
 
+        let info = StringUtils.shared.merge(list: [
+            httpRequestType,
+            endpoint.method.rawValue,
+        ])
+        BaseLogger.info(info)
+
         if let url = endpoint.url {
             let info = StringUtils.shared.merge(list: [
                 httpURLMessage,
-                "\(url)"
+                "\(url)",
             ])
             BaseLogger.info(info)
         }
@@ -38,7 +45,7 @@ public class BANetwork {
         if let authHeader = endpoint.authHeader, authHeader.count > 0 {
             let info = StringUtils.shared.merge(list: [
                 httpAuthHeadersMessage,
-                "\(authHeader)"
+                "\(authHeader)",
             ])
             BaseLogger.info(info)
         }
@@ -46,7 +53,7 @@ public class BANetwork {
         if let headers = endpoint.headers, headers.count > 0 {
             let info = StringUtils.shared.merge(list: [
                 httpHeadersMessage,
-                "\(headers)"
+                "\(headers)",
             ])
             BaseLogger.info(info)
         }
@@ -54,7 +61,7 @@ public class BANetwork {
         if let queryItems = endpoint.queryItems, queryItems.count > 0 {
             let info = StringUtils.shared.merge(list: [
                 httpQueryItemsMessage,
-                "\(queryItems)"
+                "\(queryItems)",
             ])
             BaseLogger.info(info)
         }
@@ -62,7 +69,7 @@ public class BANetwork {
         if let data = urlRequest.httpBody {
             let info = StringUtils.shared.merge(list: [
                 httpBodyMessage,
-                String(data: data, encoding: .utf8) ?? ""
+                String(data: data, encoding: .utf8) ?? "",
             ])
             BaseLogger.info(info)
         }
@@ -106,11 +113,10 @@ public class BANetwork {
 
             do {
                 let responseObject = try JSONDecoder().decode(T.self, from: data)
-                BaseLogger.info(self.dataParseSuccessMessage)
 
                 let info = StringUtils.shared.merge(list: [
                     self.responseInfoMessage,
-                    String(data: data, encoding: .utf8) ?? ""
+                    String(data: data, encoding: .utf8) ?? "",
                 ])
                 BaseLogger.info(info)
 

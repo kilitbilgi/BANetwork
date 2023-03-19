@@ -1,33 +1,18 @@
 //
 //  BAEndpoint.swift
-//  
-//
-//  Created by burak on 19.03.2023.
 //
 
 import UIKit
 
 public final class BAEndpoint {
     public init() {}
-    // MARK: API host, Default https
+
     var scheme: BaseScheme = .https
-
-    // MARK: The path for api access
     var path = ""
-
-    // MARK: Url Parameters
     var queryItems: [URLQueryItem]?
-
-    // MARK: Request parameters
     var params: [String: Any?]?
-
-    // MARK: Headers
     var headers: NSMutableDictionary?
-
-    // MARK: Default method: GET
     var method: BaseMethod = .get
-
-    // MARK: Auth header
     var authHeader: String?
 
     public func set(path: String) -> BAEndpoint {

@@ -6,24 +6,31 @@ import Foundation
 
 public struct BaseEndpoint {
     // MARK: API host, Default https
+
     var scheme: BaseScheme = .https
 
     // MARK: The path for api access
+
     var path = ""
 
     // MARK: Url Parameters
+
     var queryItems: [URLQueryItem]?
 
     // MARK: Request parameters
+
     var params: [String: Any?]?
 
     // MARK: Headers
+
     var headers: NSMutableDictionary?
 
     // MARK: Default method: GET
+
     var method: BaseMethod = .get
 
     // MARK: Generated URL for making request
+
     var url: URL? {
         var components = URLComponents()
         components.scheme = scheme.rawValue
@@ -34,9 +41,11 @@ public struct BaseEndpoint {
     }
 
     // MARK: Auth header
+
     var authHeader: String?
 
     // MARK: Generated url request
+
     var urlRequest: URLRequest? {
         guard let url = url else {
             BaseLogger.error("Error: URL couldn't create")

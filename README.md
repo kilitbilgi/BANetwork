@@ -30,7 +30,22 @@ let endpoint = BAEndpoint()
             .build()
 ```
 
-## Example Project
+- Make request!
+```bash
+network.request(to: endpoint) { (r: BaseResult<ProductResponse?, Error>) in
+            switch r {
+            case let .success(r):
+                guard let response = r else {
+                    return
+                }
+                completion?(response)
+            case let .failure(error):
+                failure?(error)
+            }
+        }
+```
+
+# Example Project
 
 https://github.com/kilitbilgi/BANetworkSample
 

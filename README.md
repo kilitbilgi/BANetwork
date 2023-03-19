@@ -38,9 +38,9 @@ network.request(to: endpoint) { (r: BaseResult<ProductResponse?, Error>) in
                 guard let response = r else {
                     return
                 }
-                completion?(response)
+                print(response)
             case let .failure(error):
-                failure?(error)
+                print(error)
             }
         }
 ```

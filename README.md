@@ -2,14 +2,14 @@
 
 BANetwork is package help developers to make requests easily.
 
-# Install
+## Install
 
 Via SPM, add new package, search url below
 ```bash
 https://github.com/kilitbilgi/BANetwork
 ```
 
-# Basic Usage
+## Basic Usage
 
 - Create plist file called BAConfig
 - Add these keys
@@ -30,7 +30,7 @@ let endpoint = BAEndpoint()
             .build()
 ```
 
-# Example Project
+## Example Project
 
 https://github.com/kilitbilgi/BANetworkSample
 

@@ -45,7 +45,7 @@ network.request(to: endpoint) { (r: BaseResult<ProductResponse?, Error>) in
         }
 ```
 
-# Example Project
+## Example Project
 
 https://github.com/kilitbilgi/BANetworkSample
 

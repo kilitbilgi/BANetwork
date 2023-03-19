@@ -5,6 +5,8 @@
 import Foundation
 
 public struct BaseEndpoint {
+    public init() {}
+
     enum Scheme: String {
         case http, https
     }

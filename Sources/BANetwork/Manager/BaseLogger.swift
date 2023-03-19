@@ -19,7 +19,7 @@ class BaseLogger {
     /// BaseLogger for success. Will add ✅ emoji to see better
     ///
     /// - Parameter message: BaseLoggerging message
-    static func info(_ message: Any!) {
+    static func info(_ message: String) {
         guard BaseLogger.shared.isEnabled else { return }
         BaseLogger.shared.debug(type: "✅", message: message)
     }
@@ -27,7 +27,7 @@ class BaseLogger {
     /// BaseLogger for warning. Will add ⚠️ emoji to see better
     ///
     /// - Parameter message: BaseLoggerging message
-    static func warning(_ message: Any!) {
+    static func warning(_ message: String) {
         guard BaseLogger.shared.isEnabled else { return }
         BaseLogger.shared.debug(type: "⚠️", message: message)
     }
@@ -35,15 +35,15 @@ class BaseLogger {
     /// BaseLogger for error. Will add ❌ emoji to see better
     ///
     /// - Parameter message: BaseLoggerging message
-    static func error(_ message: Any!) {
+    static func error(_ message: String) {
         guard BaseLogger.shared.isEnabled else { return }
         BaseLogger.shared.debug(type: "❌", message: message)
     }
 
-    private func debug(type: Any?, message: Any?) {
+    private func debug(type: Any?, message: String) {
         guard BaseLogger.shared.isEnabled else { return }
         DispatchQueue.main.async {
-            os_log("%@", type: .debug, "\(type ?? "") -> \(message ?? "")")
+            os_log("%@", type: .debug, "\(type ?? "") -> \(message)")
         }
     }
 }

@@ -5,42 +5,25 @@
 import Foundation
 
 public struct BaseEndpoint {
-    public init() {}
-
-    enum Scheme: String {
-        case http, https
-    }
-
     // MARK: API host, Default https
-
-    var scheme: Scheme = .https
-
-    // MARK: Base Url of the API
-
-    var host: String = ""
+    var scheme: BaseScheme = .https
 
     // MARK: The path for api access
-
     var path = ""
 
     // MARK: Url Parameters
-
     var queryItems: [URLQueryItem]?
 
     // MARK: Request parameters
-
     var params: [String: Any?]?
 
     // MARK: Headers
-
     var headers: NSMutableDictionary?
 
     // MARK: Default method: GET
-
     var method: BaseMethod = .get
 
     // MARK: Generated URL for making request
-
     var url: URL? {
         var components = URLComponents()
         components.scheme = scheme.rawValue
@@ -51,11 +34,9 @@ public struct BaseEndpoint {
     }
 
     // MARK: Auth header
-
     var authHeader: String?
 
     // MARK: Generated url request
-
     var urlRequest: URLRequest? {
         guard let url = url else {
             BaseLogger.error("Error: URL couldn't create")
@@ -99,36 +80,6 @@ public struct BaseEndpoint {
         configuration.timeoutIntervalForResource = config.timeout
 
         return URLSession(configuration: configuration, delegate: nil, delegateQueue: OperationQueue.main)
-    }
-
-    public mutating func set(path: String) -> BaseEndpoint {
-        self.path = path
-        return self
-    }
-
-    public mutating func add(headers: [BAHeaderModel]) -> BaseEndpoint {
-        self.headers = headers.dictionary as? NSMutableDictionary
-        return self
-    }
-
-    public mutating func add(authHeader: String) -> BaseEndpoint {
-        self.authHeader = authHeader
-        return self
-    }
-
-    public mutating func add(method: BaseMethod) -> BaseEndpoint {
-        self.method = method
-        return self
-    }
-
-    public mutating func add(queryItems: [BAQueryModel]) -> BaseEndpoint {
-        self.queryItems = QueryParamEncoder.encode(with: queryItems)
-        return self
-    }
-
-    public mutating func add(params: [String: Any?]) -> BaseEndpoint {
-        self.params = params
-        return self
     }
 }
 

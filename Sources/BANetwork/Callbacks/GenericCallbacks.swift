@@ -2,8 +2,8 @@
 //  GenericCallbacks.swift
 //
 
-public struct GenericCallbacks {
-    public typealias VoidCallback = (() -> ())?
-    public typealias ErrorCallback = ((Error?) -> ())?
-    public typealias InfoCallback = ((Bool?, Error?) -> ())?
+public enum GenericCallbacks {
+    public typealias VoidCallback = (() -> Void)?
+    public typealias ErrorCallback = ((Error?) -> Void)?
+    public typealias InfoCallback = ((Bool?, Error?) -> Void)?
 }

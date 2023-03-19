@@ -8,15 +8,15 @@ extension Error {
     var isConnectivityError: Bool {
         let code = (self as NSError).code
 
-        if (code == NSURLErrorTimedOut) {
+        if code == NSURLErrorTimedOut {
             return true // time-out
         }
 
-        if (self._domain != NSURLErrorDomain) {
+        if _domain != NSURLErrorDomain {
             return false // Cannot be a NSURLConnection error
         }
 
-        switch (code) {
+        switch code {
         case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost, NSURLErrorCannotConnectToHost:
             return true
         default:

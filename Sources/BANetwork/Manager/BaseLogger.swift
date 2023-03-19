@@ -6,14 +6,15 @@ import Foundation
 import os.log
 
 class BaseLogger {
-
     /// shared instance
     static var shared = BaseLogger()
 
-    private init(){}
+    private init() {}
 
     /// is BaseLoggerging enable
-    var isEnabled: Bool = false
+    var isEnabled: Bool {
+        return BAPlistUtils.shared.config?.isLogEnabled ?? false
+    }
 
     /// BaseLogger for success. Will add ✅ emoji to see better
     ///

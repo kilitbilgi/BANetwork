@@ -1,7 +1,6 @@
 //
 //  BANetwork.swift
 //
-//
 
 import Foundation
 
@@ -29,30 +28,30 @@ public class BANetwork {
         }
 
         if let data = endpoint.url {
-            BaseLogger.info(self.httpURLMessage + "\(data)")
+            BaseLogger.info(httpURLMessage + "\(data)")
         }
 
         if let authHeader = endpoint.authHeader, authHeader.count > 0 {
-            BaseLogger.info(self.httpAuthHeadersMessage + "\(authHeader)")
+            BaseLogger.info(httpAuthHeadersMessage + "\(authHeader)")
         }
 
         if let data = endpoint.headers, data.count > 0 {
-            BaseLogger.info(self.httpHeadersMessage + "\(data)")
+            BaseLogger.info(httpHeadersMessage + "\(data)")
         }
 
         if let data = endpoint.queryItems, data.count > 0 {
-            BaseLogger.info(self.httpQueryItemsMessage + "\(data)")
+            BaseLogger.info(httpQueryItemsMessage + "\(data)")
         }
 
         if let data = urlRequest.httpBody {
-            BaseLogger.info(self.httpBodyMessage + String(decoding: data, as: UTF8.self))
+            BaseLogger.info(httpBodyMessage + String(decoding: data, as: UTF8.self))
         }
 
         return urlRequest
     }
 
-    public func request<T: Decodable>(to endpoint: BaseEndpoint, completion: @escaping (BaseResult<T, Error>) -> ()) {
-        guard let urlRequest = self.baseRequest(to: endpoint) else {
+    public func request<T: Decodable>(to endpoint: BaseEndpoint, completion: @escaping (BaseResult<T, Error>) -> Void) {
+        guard let urlRequest = baseRequest(to: endpoint) else {
             BaseLogger.error(urlRequestErrorMessage)
             return
         }
@@ -97,12 +96,12 @@ public class BANetwork {
     }
 
     public func request(to endpoint: BaseEndpoint, completion: GenericCallbacks.InfoCallback) {
-        guard let urlRequest = self.baseRequest(to: endpoint) else {
+        guard let urlRequest = baseRequest(to: endpoint) else {
             BaseLogger.error(urlRequestErrorMessage)
             return
         }
 
-        let dataTask = endpoint.session.dataTask(with: urlRequest) { [weak self] data, response, error in
+        let dataTask = endpoint.session.dataTask(with: urlRequest) { [weak self] _, response, error in
             guard error == nil else {
                 completion?(false, BaseNetworkError(message: self?.errorMessage, log: error?.localizedDescription, endpoint: endpoint))
                 return

@@ -34,6 +34,18 @@ final class BAPlistUtils {
         do {
             let model = try decoder.decode(BAPlistModel.self, from: data)
             return model
+        } catch let DecodingError.dataCorrupted(context) {
+            throwFatalError(with: PropertyListSerializationError.dataCorrupted(context: context))
+            return nil
+        } catch let DecodingError.keyNotFound(key, context) {
+            throwFatalError(with: PropertyListSerializationError.keyNotFound(key: key, context: context))
+            return nil
+        } catch let DecodingError.valueNotFound(value, context) {
+            throwFatalError(with: PropertyListSerializationError.valueNotFound(value: value, context: context))
+            return nil
+        } catch let DecodingError.typeMismatch(type, context) {
+            throwFatalError(with: PropertyListSerializationError.typeMismatch(type: type, context: context))
+            return nil
         } catch {
             throwFatalError(with: PropertyListSerializationError.modelNotParsed)
             return nil

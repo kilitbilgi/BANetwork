@@ -5,7 +5,11 @@
 import Foundation
 
 public struct BaseEndpoint {
-    // MARK: API host, Default https
+    // MARK: API host
+
+    var host: String?
+
+    // MARK: API scheme, Default https
 
     var scheme: BaseScheme = .https
 
@@ -34,7 +38,7 @@ public struct BaseEndpoint {
     var url: URL? {
         var components = URLComponents()
         components.scheme = scheme.rawValue
-        components.host = config.baseURL
+        components.host = host
         components.path = updatedPath
         components.queryItems = queryItems
         return components.url
@@ -89,6 +93,21 @@ public struct BaseEndpoint {
         configuration.timeoutIntervalForResource = config.timeout
 
         return URLSession(configuration: configuration, delegate: nil, delegateQueue: OperationQueue.main)
+    }
+
+    init(host: String? = nil, scheme: BaseScheme, path: String = "", queryItems: [URLQueryItem]? = nil, params: [String: Any?]? = nil, headers: NSMutableDictionary? = nil, method: BaseMethod, authHeader: String? = nil) {
+        if let host = host {
+            self.host = host
+        } else {
+            self.host = config.baseURL
+        }
+        self.scheme = scheme
+        self.path = path
+        self.queryItems = queryItems
+        self.params = params
+        self.headers = headers
+        self.method = method
+        self.authHeader = authHeader
     }
 }
 

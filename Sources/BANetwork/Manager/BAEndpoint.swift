@@ -7,6 +7,7 @@ import UIKit
 public final class BAEndpoint {
     public init() {}
 
+    var host: String?
     var scheme: BaseScheme = .https
     var path = ""
     var queryItems: [URLQueryItem]?
@@ -17,6 +18,11 @@ public final class BAEndpoint {
     var headersModel: [BAHeaderModel]?
     var method: BaseMethod = .get
     var authHeader: String?
+
+    public func set(host: String) -> BAEndpoint {
+        self.host = host
+        return self
+    }
 
     public func set(path: String) -> BAEndpoint {
         self.path = path
@@ -91,6 +97,6 @@ public final class BAEndpoint {
     }
 
     public func build() -> BaseEndpoint {
-        return BaseEndpoint(scheme: scheme, path: path, queryItems: queryItems, params: params, headers: headers, method: method, authHeader: authHeader)
+        return BaseEndpoint(host: host, scheme: scheme, path: path, queryItems: queryItems, params: params, headers: headers, method: method, authHeader: authHeader)
     }
 }

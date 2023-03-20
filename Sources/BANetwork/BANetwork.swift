@@ -89,24 +89,49 @@ public class BANetwork {
             }
 
             guard error == nil else {
+                let message = StringUtils.shared.merge(list: [
+                    self.errorMessage,
+                    error?.localizedDescription ?? ""
+                ])
+                BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: error?.localizedDescription, endpoint: endpoint)))
                 return
             }
             guard response != nil else {
+                let message = StringUtils.shared.merge(list: [
+                    self.errorMessage,
+                    self.responseNullMessage
+                ])
+                BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.responseNullMessage, endpoint: endpoint)))
                 return
             }
             guard let data = data else {
+                let message = StringUtils.shared.merge(list: [
+                    self.errorMessage,
+                    self.dataNullMessage
+                ])
+                BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.dataNullMessage, endpoint: endpoint)))
                 return
             }
 
             if error?.isConnectivityError ?? false {
+                let message = StringUtils.shared.merge(list: [
+                    self.errorMessage,
+                    self.dataNullMessage
+                ])
+                BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.dataNullMessage, endpoint: endpoint)))
                 return
             }
 
             guard let httpResponse = response as? HTTPURLResponse, 200 ..< 300 ~= httpResponse.statusCode else {
+                let message = StringUtils.shared.merge(list: [
+                    self.errorMessage,
+                    self.httpStatusError
+                ])
+                BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.httpStatusError, endpoint: endpoint)))
                 return
             }
@@ -119,7 +144,6 @@ public class BANetwork {
                     String(data: data, encoding: .utf8) ?? "",
                 ])
                 BaseLogger.info(info)
-
                 completion(.success(responseObject))
             } catch let e {
                 let errorMessage = String(format: self.dataParseErrorMessage, e.localizedDescription)

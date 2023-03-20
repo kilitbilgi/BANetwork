@@ -29,6 +29,12 @@ public final class BAEndpoint {
         return self
     }
 
+    public func set(path: BAPathModel) -> BAEndpoint {
+        let pathQuery = [path.path, path.value].joined(separator: "/")
+        self.path = pathQuery
+        return self
+    }
+
     public func set(method: BaseMethod) -> BAEndpoint {
         self.method = method
         return self

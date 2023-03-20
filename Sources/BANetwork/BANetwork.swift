@@ -91,7 +91,7 @@ public class BANetwork {
             guard error == nil else {
                 let message = StringUtils.shared.merge(list: [
                     self.errorMessage,
-                    error?.localizedDescription ?? ""
+                    error?.localizedDescription ?? "",
                 ])
                 BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: error?.localizedDescription, endpoint: endpoint)))
@@ -100,7 +100,7 @@ public class BANetwork {
             guard response != nil else {
                 let message = StringUtils.shared.merge(list: [
                     self.errorMessage,
-                    self.responseNullMessage
+                    self.responseNullMessage,
                 ])
                 BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.responseNullMessage, endpoint: endpoint)))
@@ -109,7 +109,7 @@ public class BANetwork {
             guard let data = data else {
                 let message = StringUtils.shared.merge(list: [
                     self.errorMessage,
-                    self.dataNullMessage
+                    self.dataNullMessage,
                 ])
                 BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.dataNullMessage, endpoint: endpoint)))
@@ -119,7 +119,7 @@ public class BANetwork {
             if error?.isConnectivityError ?? false {
                 let message = StringUtils.shared.merge(list: [
                     self.errorMessage,
-                    self.dataNullMessage
+                    self.dataNullMessage,
                 ])
                 BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.dataNullMessage, endpoint: endpoint)))
@@ -129,7 +129,7 @@ public class BANetwork {
             guard let httpResponse = response as? HTTPURLResponse, 200 ..< 300 ~= httpResponse.statusCode else {
                 let message = StringUtils.shared.merge(list: [
                     self.errorMessage,
-                    self.httpStatusError
+                    self.httpStatusError,
                 ])
                 BaseLogger.error(message)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: self.httpStatusError, endpoint: endpoint)))
@@ -145,47 +145,34 @@ public class BANetwork {
                 ])
                 BaseLogger.info(info)
                 completion(.success(responseObject))
+            } catch let DecodingError.dataCorrupted(context) {
+                let message = StringUtils.shared.merge(list: [
+                    context.debugDescription,
+                ])
+                BaseLogger.error(message)
+            } catch let DecodingError.keyNotFound(key, context) {
+                let message = StringUtils.shared.merge(list: [
+                    "Key \(key) not found: \(context.debugDescription)",
+                    "codingPath: \(context.codingPath)",
+                ])
+                BaseLogger.error(message)
+            } catch let DecodingError.valueNotFound(value, context) {
+                let message = StringUtils.shared.merge(list: [
+                    "Value \(value) not found: \(context.debugDescription)",
+                    "codingPath: \(context.codingPath)",
+                ])
+                BaseLogger.error(message)
+            } catch let DecodingError.typeMismatch(type, context) {
+                let message = StringUtils.shared.merge(list: [
+                    "Type \(type) mismatch: \(context.debugDescription)",
+                    "codingPath: \(context.codingPath)",
+                ])
+                BaseLogger.error(message)
             } catch let e {
                 let errorMessage = String(format: self.dataParseErrorMessage, e.localizedDescription)
                 BaseLogger.warning(errorMessage)
                 completion(.failure(BaseNetworkError(message: self.errorMessage, log: errorMessage, endpoint: endpoint)))
             }
-        }
-        dataTask.resume()
-    }
-
-    public func request(to endpoint: BaseEndpoint, completion: GenericCallbacks.InfoCallback) {
-        guard let urlRequest = baseRequest(to: endpoint) else {
-            BaseLogger.error(urlRequestErrorMessage)
-            return
-        }
-
-        let dataTask = endpoint.session.dataTask(with: urlRequest) { [weak self] _, response, error in
-            guard let self = self else {
-                return
-            }
-
-            guard error == nil else {
-                completion?(false, BaseNetworkError(message: self.errorMessage, log: error?.localizedDescription, endpoint: endpoint))
-                return
-            }
-            guard response != nil else {
-                completion?(false, BaseNetworkError(message: self.errorMessage, log: self.responseNullMessage, endpoint: endpoint))
-                return
-            }
-
-            if error?.isConnectivityError ?? false {
-                completion?(false, BaseNetworkError(message: self.errorMessage, log: self.dataNullMessage, endpoint: endpoint))
-                return
-            }
-
-            guard let httpResponse = response as? HTTPURLResponse, 200 ..< 300 ~= httpResponse.statusCode else {
-                completion?(false, BaseNetworkError(message: self.errorMessage, log: self.httpStatusError, endpoint: endpoint))
-                return
-            }
-
-            BaseLogger.info(self.dataParseSuccessMessage)
-            completion?(true, nil)
         }
         dataTask.resume()
     }
